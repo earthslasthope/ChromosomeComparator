@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import Dropzone from 'react-dropzone';
+import { Tabs, Tab } from 'react-bootstrap';
 import csv from 'csvtojson';
-import _ from 'lodash';
+import * as _ from 'lodash';
 //import * as calc from './../service/calculator';
 
 const CSV_OPTIONS = {
@@ -19,8 +20,9 @@ export class Home extends React.Component<RouteComponentProps<any>, any> {
         }
     }
 
-    getMatches() {
-        
+    getMatches(): Array<any> {
+        var grouped = _.groupBy(this.state.chromosomes, 'matchName');
+        return _.toArray(grouped);
     }
 
     receiveFileDrops(files: Array<any>, rejects: Array<File>) {
@@ -52,6 +54,17 @@ export class Home extends React.Component<RouteComponentProps<any>, any> {
             <Dropzone multiple accept="text/csv" onDrop={this.receiveFileDrops.bind(this)}>
                 Click or drop file(s) here to begin
             </Dropzone>
+            { this.state.chromosomes.length > 0 &&
+            <Tabs defaultActiveKey={1}>
+                <Tab eventKey={1} title="Matches">
+                    {/* <ul> */}
+                        { this.getMatches().forEach(match => (
+                            <li>{match.matchName}</li>
+                        )) }
+                    {/* </ul> */}
+                </Tab>
+            </Tabs>
+            }
         </div>;
     }
 }
