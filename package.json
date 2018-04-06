@@ -25,6 +25,8 @@
     "jquery": "3.2.1",
     "json-loader": "0.5.4",
     "lodash": "https://registry.npmjs.org/lodash/-/lodash-4.17.4.tgz",
+    "mobx": "^4.1.1",
+    "mobx-react": "^5.0.0",
     "react": "15.6.1",
     "react-bootstrap": "^0.32.1",
     "react-dom": "15.6.1",
