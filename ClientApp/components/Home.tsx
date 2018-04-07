@@ -7,8 +7,8 @@ import csv from 'csvtojson';
 import * as _ from 'lodash';
 import ChromosomeStore from '../stores/chromosome-store';
 
-import ChromosomeTab from './ChromosomeTab';
-import MatchesTab from './MatchesTab';
+import ChromosomeDataTable from './ChromosomeDataTable';
+import Matches from './Matches';
 //import * as calc from './../service/calculator';
 
 const CSV_OPTIONS = {
@@ -45,23 +45,24 @@ export class Home extends React.Component<RouteComponentProps<any>, any> {
         store.populateMatchesWithMatrix();
     }
 
+    public clearResults() {
+        store.chromosomes = [];
+    }
+
     public render() {
         return <div>
+            <h1>Data Crunch</h1>
+            <h3>Begin by uploading raw chromosome data from FTDNA</h3>
             <Dropzone multiple accept="text/csv" onDrop={this.receiveFileDrops.bind(this)}>
                 Click or drop file(s) here to begin
             </Dropzone>
-            <input min="0" type="number" value={store.minCentimorgans} onChange={e => { store.minCentimorgans = Number(e.target.value); }} />
             { store.isReady &&
             <div>
-                <Button onClick={this.calculateSharedMatches.bind(this)} bsStyle="primary" bsSize="large">Start Calculating Matches With Shared Chromosomes</Button>
-                <Tabs defaultActiveKey={1}>
-                    <Tab eventKey={1} title="Matches">
-                        <MatchesTab store={store} />
-                    </Tab>
-                    <Tab eventKey={2} title="Chromosomes">
-                        <ChromosomeTab items={store.filteredChromosomes} />
-                    </Tab>
-                </Tabs>
+                <div className="pull-right">
+                    <Button onClick={this.clearResults.bind(this)}>Clear Results</Button>
+                </div>
+                <h3>Select relative to explore</h3>
+                <Matches store={store} />
             </div>
             }
         </div>;

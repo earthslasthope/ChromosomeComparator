@@ -18,7 +18,7 @@ export interface Match {
 }
 
 export default class ChromosomeStore {
-    @observable minCentimorgans: number = 7;
+    @observable minCentimorgans: number = 5;
     @observable chromosomes: Array<Chromosome> = [];
     @observable showSharedChromosomes: boolean = false;
     @observable modalMatch?: Match = null;

@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router';
 import { Table } from 'react-bootstrap';
 import { Chromosome } from './../stores/chromosome-store';
 
-export default class ChromosomeTab extends React.Component<{items: Array<Chromosome>}> {
+export default class ChromosomeDataTable extends React.Component<{items: Array<Chromosome>}> {
     render() {
         return (<Table>
             <thead>

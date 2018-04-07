@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { Modal } from 'react-bootstrap';
 
 @observer
-export default class MatchesTab extends React.Component<{store: ChromosomeStore}>  {
+export default class Matches extends React.Component<{store: ChromosomeStore}>  {
 
     getCommonChromosomesNode(match: Match) {
         var entries: Array<{match: Match, chromosomes: Chromosome[]}>= [];
