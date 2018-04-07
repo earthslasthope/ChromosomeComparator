@@ -21,6 +21,7 @@ export default class ChromosomeStore {
     @observable minCentimorgans: number = 7;
     @observable chromosomes: Array<Chromosome> = [];
     @observable showSharedChromosomes: boolean = false;
+    @observable modalMatch?: Match = null;
 
     @computed get filteredChromosomes(): Array<Chromosome> {
         return _.filter(this.chromosomes, x => x.centimorgans >= this.minCentimorgans);
@@ -77,7 +78,11 @@ export default class ChromosomeStore {
                                     ((chromosomeA.locationStart >= chromosomeB.locationStart && 
                                     chromosomeA.locationStart <= chromosomeB.locationEnd ) ||
                                     (chromosomeB.locationStart >= chromosomeA.locationStart && 
-                                        chromosomeB.locationStart <= chromosomeA.locationEnd));
+                                    chromosomeB.locationStart <= chromosomeA.locationEnd) ||
+                                    (chromosomeA.locationEnd >= chromosomeB.locationStart && 
+                                    chromosomeA.locationEnd <= chromosomeB.locationEnd ) ||
+                                    (chromosomeB.locationEnd >= chromosomeA.locationStart && 
+                                    chromosomeB.locationEnd <= chromosomeA.locationEnd));
                             });
                         });
                     }

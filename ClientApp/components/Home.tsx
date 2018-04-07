@@ -20,16 +20,6 @@ let store = new ChromosomeStore();
 
 @observer
 export class Home extends React.Component<RouteComponentProps<any>, any> {
-    constructor(props: any) {
-        super(props);
-
-        this.state = {
-            minCentimorgans: 7,
-            chromosomes: [],
-            matches: []
-        }
-    }
-
     receiveFileDrops(files: Array<any>, rejects: Array<File>) {
         var reader = new FileReader();
         let component = this;
@@ -42,6 +32,7 @@ export class Home extends React.Component<RouteComponentProps<any>, any> {
                 })
                 .on('done', () => {
                     store.chromosomes = entries;
+                    store.populateMatchesWithMatrix();
                 })
         }
         
@@ -65,7 +56,7 @@ export class Home extends React.Component<RouteComponentProps<any>, any> {
                 <Button onClick={this.calculateSharedMatches.bind(this)} bsStyle="primary" bsSize="large">Start Calculating Matches With Shared Chromosomes</Button>
                 <Tabs defaultActiveKey={1}>
                     <Tab eventKey={1} title="Matches">
-                        <MatchesTab items={store.matches} showSharedChromosomes={store.showSharedChromosomes} />
+                        <MatchesTab store={store} />
                     </Tab>
                     <Tab eventKey={2} title="Chromosomes">
                         <ChromosomeTab items={store.filteredChromosomes} />
