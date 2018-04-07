@@ -17,11 +17,20 @@ export interface Match {
     commonChromosomes?: Map<Match, Chromosome[]>;
 }
 
+export interface Filter {
+    match: Match;
+    isSharedWith: boolean;
+}
+
 export default class ChromosomeStore {
     @observable minCentimorgans: number = 5;
+    @observable superMatchThreshold: number = 1000;
     @observable chromosomes: Array<Chromosome> = [];
     @observable showSharedChromosomes: boolean = false;
     @observable modalMatch?: Match = null;
+    @observable sortField: string = 'centimorgans';
+    @observable sortDirection?: string = 'desc';
+    @observable filter?: Filter;
 
     @computed get filteredChromosomes(): Array<Chromosome> {
         return _.filter(this.chromosomes, x => x.centimorgans >= this.minCentimorgans);
@@ -45,7 +54,24 @@ export default class ChromosomeStore {
             });
         });
 
-        return result;
+        return _.orderBy(result, this.sortField, this.sortDirection);
+    }
+
+    @computed get filteredMatches(): Array<Match> {
+        if (!this.filter) {
+            return this.matches;
+        }
+
+        if (this.filter.isSharedWith) {
+            return _.filter(this.matches, x => x.commonChromosomes.has(this.filter.match));
+        }
+        else {
+            return _.filter(this.matches, x => !x.commonChromosomes.has(this.filter.match));
+        }
+    }
+
+    @computed get superMatches(): Array<Match> {
+        return _.filter(this.matches, x => x.centimorgans >= this.superMatchThreshold);
     }
 
     populateMatchesWithMatrix () {

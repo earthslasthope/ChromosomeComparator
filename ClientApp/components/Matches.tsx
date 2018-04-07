@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import ChromosomeStore, { Match, Chromosome } from "../stores/chromosome-store";
 import * as _ from 'lodash';
 import { Modal } from 'react-bootstrap';
+import ReactDataGrid from 'react-data-grid';
 
 @observer
 export default class Matches extends React.Component<{store: ChromosomeStore}>  {
@@ -33,8 +34,24 @@ export default class Matches extends React.Component<{store: ChromosomeStore}>  
         this.props.store.modalMatch = null;
     }
 
+    rowClick(index, row) {
+        var match = this.props.store.matches[index];
+        this.openMatch(match);
+    }
+
+    onGridSort(column, direction) {
+        const { store } = this.props;
+        store.sortField = column;
+        store.sortDirection = direction === 'DESC' ? 'desc' : null;
+    }
+
+    chromosomeFormatter(props) {
+        return (<span>{props.value.length}</span>);
+    }
+
     render() {
-        var { showSharedChromosomes, matches, modalMatch } = this.props.store;
+        var { showSharedChromosomes, modalMatch } = this.props.store;
+        var matches = this.props.store.filteredMatches;
         return <div>
             { modalMatch &&
             <Modal show={modalMatch} onHide={this.closeMatch.bind(this)}>
@@ -54,14 +71,13 @@ export default class Matches extends React.Component<{store: ChromosomeStore}>  
                 </Modal.Body>
             </Modal>
             }
-            <ul>
-                { _.orderBy(matches, x => x.centimorgans, 'desc').map((match, index) => (
-                    <li key={index}>
-                        <a href="#" onClick={this.openMatch.bind(this, match)}>{match.matchName}</a>
-                        
-                    </li>
-                )) }
-            </ul>
+            <ReactDataGrid columns={[
+                {key: 'matchName', name: 'Name', sortable: true},
+                {key: 'centimorgans', name: 'cM', sortable: true},
+                {key: 'chromosomes', name: '# of chromosomes', formatter: this.chromosomeFormatter }
+                ]} rowsCount={matches.length} rowGetter={(i) => matches[i] }
+                onRowClick={this.rowClick.bind(this)} onGridSort={this.onGridSort.bind(this)}
+                minHeight={600} />
         </div>
     }
 }

@@ -9,6 +9,7 @@ import ChromosomeStore from '../stores/chromosome-store';
 
 import ChromosomeDataTable from './ChromosomeDataTable';
 import Matches from './Matches';
+import Filters from './Filters';
 //import * as calc from './../service/calculator';
 
 const CSV_OPTIONS = {
@@ -62,6 +63,7 @@ export class Home extends React.Component<RouteComponentProps<any>, any> {
                     <Button onClick={this.clearResults.bind(this)}>Clear Results</Button>
                 </div>
                 <h3>Select relative to explore</h3>
+                { store.superMatches.length > 1 && <Filters store={store} /> }
                 <Matches store={store} />
             </div>
             }
