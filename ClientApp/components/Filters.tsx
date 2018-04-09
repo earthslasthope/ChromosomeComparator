@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import ChromosomeStore, { Match, Chromosome } from "../stores/chromosome-store";
-import {FormControl, Checkbox, Panel} from 'react-bootstrap';
+import {FormControl, Checkbox, Panel, FormGroup, InputGroup, Button} from 'react-bootstrap';
 
 @observer
 export default class Filters extends React.Component<{store: ChromosomeStore}, {isSharedWith: boolean}>  {
@@ -22,8 +22,15 @@ export default class Filters extends React.Component<{store: ChromosomeStore}, {
     }
 
     toggleSharedWithFlag(e) {
+        let {store} = this.props;
+        let {checked} = e.target;
+
         this.setState({
-           isSharedWith: e.target.checked 
+           isSharedWith: checked 
+        }, () => {
+            if (store.filter) {
+                store.filter.isSharedWith = checked;
+            }
         });
     }
 
@@ -31,19 +38,36 @@ export default class Filters extends React.Component<{store: ChromosomeStore}, {
         this.props.store.filter = null;
     }
 
+    onNameFilterChange(e) {
+        this.props.store.nameFilter = e.target.value;
+    }
+
     render () {
-        const { superMatches } = this.props.store;
+        const { store } = this.props;
+        const { superMatches } = store;
 
         return <Panel>
             <Panel.Body>
-                <h5>Filter by super match</h5>
-                <Checkbox checked={this.state.isSharedWith} onChecked={this.toggleSharedWithFlag.bind(this)}>Include (else exclude)</Checkbox>
-                <FormControl componentClass="select">
-                    <option onSelect={this.reset.bind(this)}>-- Select --</option>
-                    { superMatches.map(x => (
-                        <option onSelect={this.selectMatch.bind(this, x)}>{x.matchName}</option>
-                    )) }
-                </FormControl>
+                <h5>Filter by name</h5>
+                <FormGroup>
+                    <InputGroup>
+                        <FormControl type="text" value={store.nameFilter} onChange={this.onNameFilterChange.bind(this)} />
+                        <InputGroup.Button>
+                            <Button onClick={() => { store.nameFilter = ''; }}>Clear</Button>
+                        </InputGroup.Button>
+                    </InputGroup>
+                </FormGroup>
+                { superMatches.length > 0 && <div>
+                    <h5>Filter by super match</h5>
+                    <Checkbox checked={this.state.isSharedWith} onChange={this.toggleSharedWithFlag.bind(this)}>Include (else exclude)</Checkbox>
+                    <FormControl componentClass="select" onChange={this.selectMatch.bind(this)}>
+                        <option>-- Select --</option>
+                        { superMatches.map((x ,index) => (
+                            <option key={index}>{x.matchName}</option>
+                        )) }
+                    </FormControl>
+                </div>
+                }
             </Panel.Body>
         </Panel>
     }

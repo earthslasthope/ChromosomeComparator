@@ -20,8 +20,8 @@ export default class Matches extends React.Component<{store: ChromosomeStore}>  
         });
 
         return (<ul>
-            {_.orderBy(entries, x => x.match.centimorgans, 'desc').map(entry => (
-                <li>{entry.match.matchName} (#{entry.chromosomes.length} shared chromosomes, {entry.match.centimorgans} cM)</li>
+            {_.orderBy(entries, x => x.match.centimorgans, 'desc').map((entry, index) => (
+                <li key={index}>{entry.match.matchName} (#{entry.chromosomes.length} shared chromosomes, {entry.match.centimorgans} cM)</li>
             ))}
         </ul>);
     }
@@ -54,7 +54,7 @@ export default class Matches extends React.Component<{store: ChromosomeStore}>  
         var matches = this.props.store.filteredMatches;
         return <div>
             { modalMatch &&
-            <Modal show={modalMatch} onHide={this.closeMatch.bind(this)}>
+            <Modal show={!!modalMatch} onHide={this.closeMatch.bind(this)}>
                 <Modal.Header closeButton>
                     <Modal.Title>{modalMatch.matchName}</Modal.Title>
                 </Modal.Header>
@@ -71,8 +71,9 @@ export default class Matches extends React.Component<{store: ChromosomeStore}>  
                 </Modal.Body>
             </Modal>
             }
+            Click on row to review to view shared matches
             <ReactDataGrid columns={[
-                {key: 'matchName', name: 'Name', sortable: true},
+                {key: 'matchName', name: 'Name', sortable: true, filterable: true},
                 {key: 'centimorgans', name: 'cM', sortable: true},
                 {key: 'chromosomes', name: '# of chromosomes', formatter: this.chromosomeFormatter }
                 ]} rowsCount={matches.length} rowGetter={(i) => matches[i] }

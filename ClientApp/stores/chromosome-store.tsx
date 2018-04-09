@@ -31,6 +31,7 @@ export default class ChromosomeStore {
     @observable sortField: string = 'centimorgans';
     @observable sortDirection?: string = 'desc';
     @observable filter?: Filter;
+    @observable nameFilter: string = '';
 
     @computed get filteredChromosomes(): Array<Chromosome> {
         return _.filter(this.chromosomes, x => x.centimorgans >= this.minCentimorgans);
@@ -58,16 +59,22 @@ export default class ChromosomeStore {
     }
 
     @computed get filteredMatches(): Array<Match> {
-        if (!this.filter) {
-            return this.matches;
+        var result = this.matches;
+
+        if (this.nameFilter) {
+            result = _.filter(result, x => x.matchName.indexOf(this.nameFilter) > -1);
         }
 
-        if (this.filter.isSharedWith) {
-            return _.filter(this.matches, x => x.commonChromosomes.has(this.filter.match));
+        if (this.filter) {
+            if (this.filter.isSharedWith) {
+                result = _.filter(result, x => x.commonChromosomes.has(this.filter.match));
+            }
+            else {
+                result = _.filter(result, x => !x.commonChromosomes.has(this.filter.match));
+            }
         }
-        else {
-            return _.filter(this.matches, x => !x.commonChromosomes.has(this.filter.match));
-        }
+
+        return result;
     }
 
     @computed get superMatches(): Array<Match> {
