@@ -11,7 +11,7 @@ const About = () => (<div>
         To aid the effort of enhancing this tool please consider giving me a <NavLink to={'/donate'}>donation</NavLink> of any size you wish.
     </p>
     <p>
-        My philosophy is to avoid any manual tasks which can be automated and to search on DNA websites for common lineages by browsing
+        My philosophy is to avoid any manual tasks which can be automated as searching on DNA websites for common lineages by browsing
         chromosomes is really tedious.
     </p>
     <p>

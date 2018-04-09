@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, reaction } from 'mobx';
 import * as _ from 'lodash';
 
 export interface Chromosome {
@@ -23,6 +23,15 @@ export interface Filter {
 }
 
 export default class ChromosomeStore {
+
+    constructor() {
+        let root = this;
+
+        // reaction(() => this.filteredMatches, () => {
+        //     root.populateMatchesWithMatrix();
+        // });
+    }
+
     @observable minCentimorgans: number = 5;
     @observable superMatchThreshold: number = 1000;
     @observable chromosomes: Array<Chromosome> = [];
@@ -84,7 +93,7 @@ export default class ChromosomeStore {
     populateMatchesWithMatrix () {
         var matrix = this.buildMatrix();
 
-        _.forEach(this.matches, match => {
+        _.forEach(this.filteredMatches, match => {
             match.commonChromosomes = matrix.get(match);
         })
 
@@ -95,9 +104,9 @@ export default class ChromosomeStore {
         let root = this;
         var outerMap = new Map<Match, Map<Match,Chromosome[]>>();
 
-        this.matches.forEach(matchA => {
+        this.filteredMatches.forEach(matchA => {
             var innerMap = new Map<Match, Chromosome[]>();
-            this.matches.forEach(matchB => {
+            this.filteredMatches.forEach(matchB => {
                 if (matchA !== matchB) {
                     var matchBMap = outerMap.get(matchB);
                     var chromosomes = matchBMap && matchBMap.get(matchA);
