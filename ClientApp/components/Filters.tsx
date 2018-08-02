@@ -48,7 +48,7 @@ export default class Filters extends React.Component<{store: ChromosomeStore}, {
 
         return <Panel>
             <Panel.Body>
-                <h5>Filter by name</h5>
+                <h5>Filter by namefsdfdsfs</h5>
                 <FormGroup>
                     <InputGroup>
                         <FormControl type="text" value={store.nameFilter} onChange={this.onNameFilterChange.bind(this)} />
@@ -57,7 +57,7 @@ export default class Filters extends React.Component<{store: ChromosomeStore}, {
                         </InputGroup.Button>
                     </InputGroup>
                 </FormGroup>
-                { superMatches.length > 0 && <div>
+                {  /* NOTE: Super Match functionality is broken, hence this section is commented out -- superMatches.length > 0 && <div>
                     <h5>Filter by super match</h5>
                     <Checkbox checked={this.state.isSharedWith} onChange={this.toggleSharedWithFlag.bind(this)}>Include (else exclude)</Checkbox>
                     <FormControl componentClass="select" onChange={this.selectMatch.bind(this)}>
@@ -67,7 +67,7 @@ export default class Filters extends React.Component<{store: ChromosomeStore}, {
                         )) }
                     </FormControl>
                 </div>
-                }
+                    */}
             </Panel.Body>
         </Panel>
     }

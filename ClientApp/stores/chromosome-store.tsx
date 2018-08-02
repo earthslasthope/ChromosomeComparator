@@ -27,12 +27,12 @@ export default class ChromosomeStore {
     constructor() {
         let root = this;
 
-        // reaction(() => this.filteredMatches, () => {
-        //     root.populateMatchesWithMatrix();
-        // });
+        reaction(() => this.filteredMatches, () => {
+            root.populateMatchesWithMatrix();
+        });
     }
 
-    @observable minCentimorgans: number = 5;
+    @observable minCentimorgans: number = 20;
     @observable superMatchThreshold: number = 1000;
     @observable chromosomes: Array<Chromosome> = [];
     @observable showSharedChromosomes: boolean = false;
